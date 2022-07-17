@@ -32,7 +32,6 @@ $app->get('/', function (Request $request, Response $response, $args) {
 });
 
 
-
 // area_types
 
 $app->get('/area_types', function (Request $request, Response $response, $args) {
@@ -115,6 +114,7 @@ $app->get('/charge_types/{id}', function (Request $request, Response $response, 
     $response->getBody()->write(json_encode($data));
     return $response->withHeader("Content-type", "application/json");
 });
+
 // "localizations",
 $app->get('/localizations', function (Request $request, Response $response, $args) {
     global $bdd;
@@ -248,4 +248,22 @@ $app->get('/product_types/{id}', function (Request $request, Response $response,
     $response->getBody()->write(json_encode($data));
     return $response->withHeader("Content-type", "application/json");
 });
+
+
+// requete produit page
+
+
+$app->get('/prod', function (Request $request, Response $response, $args) {
+    global $bdd;
+    $req = $bdd->prepare("SELECT *
+    FROM products
+    INNER JOIN pictures ON products.id = pictures.product_id
+    INNER JOIN localizations ON products.id = localizations.product_id");
+    $req->execute();
+    $data = $req->fetchAll(PDO::FETCH_ASSOC);
+    $response->getBody()->write(json_encode($data));
+    return $response->withHeader("Content-type", "application/json");
+});
+
+
 $app->run();
