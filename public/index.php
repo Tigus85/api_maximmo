@@ -258,11 +258,15 @@ $app->get('/prod', function (Request $request, Response $response, $args) {
     $req = $bdd->prepare("SELECT *
     FROM products
     INNER JOIN pictures ON products.id = pictures.product_id
-    INNER JOIN localizations ON products.id = localizations.product_id");
+    INNER JOIN localizations ON products.id = localizations.product_id
+    INNER JOIN area_types_products ON products.id = area_types_products.product_id");
     $req->execute();
-    $data = $req->fetchAll(PDO::FETCH_ASSOC);
+    $data[""] = $req->fetchAll(PDO::FETCH_ASSOC);
+    
     $response->getBody()->write(json_encode($data));
     return $response->withHeader("Content-type", "application/json");
+
+
 });
 
 
